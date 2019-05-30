@@ -16,23 +16,51 @@
     </v-toolbar>
 
     <v-content>
-      <HelloWorld/>
+      <v-layout row wrap>
+        <v-flex xs12 md12 sm12>
+          <new-item @createNewItem="addItem($event)" :totalItem="items.length" :itemLimit="itemLimit"></new-item>
+        </v-flex>
+        <v-flex xs12 md12 sm12>
+          <item-layout :items="items" @deletedItem="deletedItem($event)"/>
+        </v-flex>
+      </v-layout>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import ItemLayout from './components/ItemLayout'
+import NewItem from './components/NewItem'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ItemLayout,
+    NewItem
   },
-  data () {
+  data() {
     return {
-      //
+      items: [
+      ],
+      itemLimit: 10,
     }
+  },
+
+  methods: {
+    addItem(addedItem) {
+      if(this.items.includes(addedItem)) {
+        alert("please enter other name")
+        return false
+      }
+      if(this.items.length > this.itemLimit) {
+        alert("please remove item")
+        return false
+      }
+      this.items.push(addedItem)
+    },
+    deletedItem(index) {
+      this.items.splice(index, 1)
+    },
   }
 }
 </script>
